@@ -17,7 +17,6 @@ async function parseToken(token) {
 		console.log('The ban hammer struck!');
 		banToken(token);
 	}
-	return null;
 }
 
 async function verifyToken(token) {
