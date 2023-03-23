@@ -64,7 +64,7 @@ authController.get('/logout', async (req, res) => {
 		}
 		await logout(req.token);
 
-		res.status(202).end();
+		res.status(202).json({}).end();
 	} catch (error) {
 		res.status(401).json({
 			message: errorParser(error)
