@@ -133,7 +133,7 @@ authController.post('/changePassword',
 				req.user.userId,
 				req.token
 			);
-			res.status(202).end();
+			res.status(202).json({ message: 'Done' });
 		} catch (error) {
 			res.status(401).json({
 				message: errorParser(error)
@@ -158,7 +158,7 @@ authController.post('/deleteAccount',
 			}
 
 			await deleteAccount(req.body.password, req.user.userId, req.token);
-			res.status(202).end();
+			res.status(202).json({ message: 'Done' });
 		} catch (error) {
 			res.status(401).json({
 				message: errorParser(error)
