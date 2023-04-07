@@ -28,7 +28,8 @@ function createToken(user) {
 	const data = {
 		userId: user._id,
 		email: user.email,
-		username: user.username
+		username: user.username,
+		app: user.app
 	};
 
 	return {

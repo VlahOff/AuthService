@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const { createToken, banToken, verifyToken } = require('./tokenService');
 
-async function register(email, username, password) {
+async function register(email, username, password, origin) {
 	const existingEmail = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
 	const existingUsername = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
 
@@ -14,7 +14,16 @@ async function register(email, username, password) {
 		throw new Error('USERNAME_TAKEN');
 	}
 
+	const appList = {
+		'http://localhost:4200': 'Aniline',
+		'https://aniline.vercel.app': 'Aniline',
+		'http://localhost:3000': 'BulgarianDrivers',
+		'https://bulgarian-drivers.vercel.app': 'BulgarianDrivers',
+	};
+
+	const appIndex = appList[origin];
 	const user = await User.create({
+		app: appIndex,
 		email,
 		username,
 		hashedPassword: await bcrypt.hash(password, 10)

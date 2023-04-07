@@ -23,7 +23,12 @@ authController.post('/register',
 				throw errors;
 			}
 
-			const token = await register(req.body.email, req.body.username, req.body.password);
+			const token = await register(
+				req.body.email,
+				req.body.username,
+				req.body.password,
+				req.headers.origin
+			);
 			res.status(201).json(token);
 		} catch (error) {
 			res.status(400).json({
