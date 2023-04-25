@@ -15,6 +15,7 @@ async function register(email, username, password, origin) {
 	}
 
 	const appList = {
+		'http://localhost:5173': 'Aniline',
 		'http://localhost:4200': 'Aniline',
 		'https://aniline.vercel.app': 'Aniline',
 		'http://localhost:3000': 'BulgarianDrivers',
