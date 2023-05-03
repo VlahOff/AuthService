@@ -1,4 +1,4 @@
-const { corsWhiteList } = require('../corsWhiteList');
+const { corsWhiteList } = require('./corsWhiteList');
 
 module.exports = () => (req, res, next) => {
   if (corsWhiteList.indexOf(req.headers.origin) !== -1) {

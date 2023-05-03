@@ -8,7 +8,6 @@ const tokenParser = require('./middlewares/tokenParser');
 const cors = require('./middlewares/cors');
 
 const authController = require('./controllers/authController');
-const { isCorrectOrigin } = require('./middlewares/guards');
 
 async function start() {
   const app = express();
@@ -16,7 +15,6 @@ async function start() {
   app.use(cors());
   app.use(express.json());
   app.use(tokenParser());
-  app.use(isCorrectOrigin());
   const connectToDB = databaseConfig();
 
   app.use('/auth', authController);
