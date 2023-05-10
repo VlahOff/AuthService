@@ -2,12 +2,12 @@ require('dotenv').config();
 
 const express = require('express');
 const databaseConfig = require('./config/db');
-const EXPRESS_PORT = process.env.EXPRESS_PORT;
 
 const tokenParser = require('./middlewares/tokenParser');
 const cors = require('./middlewares/cors');
-
 const authController = require('./controllers/authController');
+
+const EXPRESS_PORT = process.env.EXPRESS_PORT;
 
 async function start() {
   const app = express();

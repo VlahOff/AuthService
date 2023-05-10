@@ -26,8 +26,7 @@ authController.post('/register',
 			const token = await register(
 				req.body.email,
 				req.body.username,
-				req.body.password,
-				req.headers.origin
+				req.body.password
 			);
 			res.status(201).json(token);
 		} catch (error) {

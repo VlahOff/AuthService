@@ -2,9 +2,14 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const { createToken, banToken, verifyToken } = require('./tokenService');
 
-async function register(email, username, password, origin) {
-	const existingEmail = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
-	const existingUsername = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
+async function register(email, username, password) {
+	const existingEmail = await User
+		.findOne({ email })
+		.collation({ locale: 'en', strength: 2 });
+
+	const existingUsername = await User
+		.findOne({ username })
+		.collation({ locale: 'en', strength: 2 });
 
 	if (existingEmail) {
 		throw new Error('EMAIL_TAKEN');
@@ -14,17 +19,7 @@ async function register(email, username, password, origin) {
 		throw new Error('USERNAME_TAKEN');
 	}
 
-	const appList = {
-		'http://localhost:5173': 'Aniline',
-		'http://localhost:4200': 'Aniline',
-		'https://aniline.vercel.app': 'Aniline',
-		'http://localhost:3000': 'BulgarianDrivers',
-		'https://bulgarian-drivers.vercel.app': 'BulgarianDrivers',
-	};
-
-	const appIndex = appList[origin];
 	const user = await User.create({
-		app: appIndex,
 		email,
 		username,
 		hashedPassword: await bcrypt.hash(password, 10)
@@ -34,7 +29,9 @@ async function register(email, username, password, origin) {
 }
 
 async function login(email, password) {
-	const user = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
+	const user = await User
+		.findOne({ email })
+		.collation({ locale: 'en', strength: 2 });
 
 	if (!user) {
 		throw new Error('INVALID_CREDENTIALS');
@@ -79,6 +76,7 @@ async function changeUsername(newUsername, password, userId, token) {
 			hashedPassword: user.hashedPassword
 		}
 	);
+	
 	const updatedUser = await User.findById(userId);
 	return updatedUser;
 }
