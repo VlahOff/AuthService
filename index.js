@@ -1,4 +1,7 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config({
+  path: process.env.npm_command === 'start' ? '.env' : '.env.development',
+});
 
 const express = require('express');
 const databaseConfig = require('./config/db');
@@ -24,7 +27,9 @@ async function start() {
   });
 
   connectToDB.then(() => {
-    app.listen(EXPRESS_PORT, () => console.log('Auth service listening on port: ' + EXPRESS_PORT));
+    app.listen(EXPRESS_PORT, () =>
+      console.log('Auth service listening on port: ' + EXPRESS_PORT)
+    );
   });
 }
 
