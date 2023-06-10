@@ -1,7 +1,4 @@
-const dotenv = require('dotenv');
-dotenv.config({
-  path: process.env.npm_command === 'start' ? '.env' : '.env.development',
-});
+require('dotenv').config();
 
 const express = require('express');
 const databaseConfig = require('./config/db');
