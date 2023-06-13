@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const SALT_ROUNDS = Number(process.env.SALT_ROUNDS);
 
 const User = require('../models/User');
 const UserPasswordReset = require('../models/UserPasswordReset');
@@ -27,7 +28,7 @@ async function register(email, username, password) {
   const user = await User.create({
     email,
     username,
-    hashedPassword: await bcrypt.hash(password, 10),
+    hashedPassword: await bcrypt.hash(password, SALT_ROUNDS),
   });
 
   return createToken(user);
@@ -92,7 +93,7 @@ async function changePassword(oldPassword, newPassword, userId, token) {
   await User.findByIdAndUpdate(userId, {
     email: user.email,
     username: user.username,
-    hashedPassword: await bcrypt.hash(newPassword, 10),
+    hashedPassword: await bcrypt.hash(newPassword, SALT_ROUNDS),
   });
 }
 
@@ -136,7 +137,7 @@ async function hasTicketExpired(userId) {
 
 async function resetPassword(password, userId) {
   const user = await User.findByIdAndUpdate(userId, {
-    hashedPassword: await bcrypt.hash(password, 10),
+    hashedPassword: await bcrypt.hash(password, SALT_ROUNDS),
   });
 
   return createToken(user);
