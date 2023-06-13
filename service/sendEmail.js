@@ -5,7 +5,7 @@ const HOST_PASS = process.env.HOST_PASS;
 
 async function sendEmail(recipientEmail, userId) {
   const transporter = nodeMailer.createTransport({
-    host: 'smtp.abv.bg',
+    host: 'smtp.gmail.com',
     port: 465,
     secure: true,
     auth: {
@@ -18,7 +18,7 @@ async function sendEmail(recipientEmail, userId) {
   });
 
   await transporter.sendMail({
-    from: 'Aniline <aniline@abv.bg>',
+    from: 'Aniline <anilinecrypto@gmail.com>',
     to: recipientEmail,
     subject: 'Password reset.',
     html: `
