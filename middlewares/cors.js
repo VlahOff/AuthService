@@ -2,7 +2,7 @@ const cors = process.env.CORS_WHITELIST;
 const corsArr = cors.split(' ');
 
 module.exports = () => (req, res, next) => {
-  if (cors.indexOf(req.headers.origin) !== -1) {
+  if (corsArr.indexOf(req.headers.origin) !== -1) {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header(
       'Access-Control-Allow-Headers',
