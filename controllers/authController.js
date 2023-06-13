@@ -175,7 +175,7 @@ authController.post(
       res.status(200).json({ success: 'EMAIL_SENT' });
     } catch (error) {
       res.status(400).json({
-        message: 'error',
+        message: errorParser(error),
       });
     }
   }
