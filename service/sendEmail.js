@@ -5,7 +5,7 @@ const HOST_PASS = process.env.HOST_PASS;
 
 async function sendEmail(recipientEmail, userId) {
   const transporter = nodeMailer.createTransport({
-    host: 'smtp.abv.bg',
+    host: '194.153.145.219',
     port: 465,
     secure: true,
     auth: {
