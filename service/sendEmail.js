@@ -12,7 +12,6 @@ async function sendEmail(recipientEmail, userId) {
       user: HOST_USER,
       pass: HOST_PASS,
     },
-    tls: { rejectUnauthorized: false },
   });
 
   await transporter.sendMail({
