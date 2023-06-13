@@ -23,7 +23,7 @@ async function sendEmail(recipientEmail, userId) {
     <div style="text-align: center; background-color: black; font-family: Arial, Helvetica, sans-serif; padding: 2rem;">
     <h1 style="color: white; font-family: Arial, Helvetica, sans-serif; margin-top: 0;">Aniline</h1>
     <h2 style="color: white;">You have 10 minutes to reset your password.</h2>
-    <a href="http://localhost:5173/reset-password/${userId}" target="_blank"
+    <a href="https://aniline.vercel.app/reset-password/${userId}" target="_blank"
       style="background-color: rgb(177, 0, 0); color: white; padding: 8px 12px; border-radius: 0.5rem; text-decoration: none;"
       onMouseOver="this.style.backgroundColor='rgb(247, 16, 16)'"
       onMouseOut="this.style.backgroundColor='rgb(177, 0, 0)'"
