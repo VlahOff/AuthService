@@ -5,14 +5,16 @@ const HOST_PASS = process.env.HOST_PASS;
 
 async function sendEmail(recipientEmail, userId) {
   const transporter = nodeMailer.createTransport({
-    host: '194.153.145.219',
+    host: 'smtp.abv.bg',
     port: 465,
     secure: true,
     auth: {
       user: HOST_USER,
       pass: HOST_PASS,
     },
-    tls: { rejectUnauthorized: false, servername: 'smtp.abv.bg' },
+    tls: { rejectUnauthorized: false },
+    logger: true,
+    debug: true,
   });
 
   await transporter.sendMail({
