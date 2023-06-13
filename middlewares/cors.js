@@ -1,4 +1,5 @@
-const cors = process.env.CORS_WHITELIST.split(' ');
+const cors = process.env.CORS_WHITELIST;
+const corsArr = cors.split(' ');
 
 module.exports = () => (req, res, next) => {
   if (cors.indexOf(req.headers.origin) !== -1) {
