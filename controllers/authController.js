@@ -11,11 +11,16 @@ const {
   markUserForPassReset,
   resetPassword,
   hasTicketExpired,
+  verifyEmail,
 } = require('../service/userService');
 
 const { isAuthenticated } = require('../middlewares/guards');
 const sendEmail = require('../service/sendEmail');
 const errorParser = require('../utils/errorParser');
+
+const resetPasswordTemplate = require('../emailTemplates/resetPasswordTemplate');
+const verifyEmailTemplate = require('../emailTemplates/verifyEmailTemplate');
+const activateAccountTemplate = require('../pages/activateAccountTemplate');
 
 authController.post(
   '/register',
@@ -35,15 +40,14 @@ authController.post(
         throw errors;
       }
 
-      const token = await register(
-        req.body.email,
-        req.body.username,
-        req.body.password
-      );
-      res.status(201).json(token);
+      const email = req.body.email;
+
+      await sendEmail(email, verifyEmailTemplate(email));
+      await register(email, req.body.username, req.body.password);
+      res.status(201).json({ message: 'SUCCESSFULLY_REGISTERED' });
     } catch (error) {
       res.status(400).json({
-        message: errorParser(error),
+        errorMessage: errorParser(error),
       });
     }
   }
@@ -67,7 +71,7 @@ authController.post(
       res.status(200).json(token);
     } catch (error) {
       res.status(401).json({
-        message: errorParser(error),
+        errorMessage: errorParser(error),
       });
     }
   }
@@ -78,12 +82,24 @@ authController.get('/logout', async (req, res) => {
     if (req.token === '') {
       throw new Error('TOKEN_IS_NULL');
     }
-    await logout(req.token);
 
-    res.status(202).json({}).end();
+    await logout(req.token);
+    res.status(202).json({ message: 'SUCCESS' });
   } catch (error) {
     res.status(401).json({
-      message: errorParser(error),
+      errorMessage: errorParser(error),
+    });
+  }
+});
+
+authController.get('/verifyEmail', async (req, res) => {
+  try {
+    await verifyEmail(req.query.email);
+
+    res.status(202).send(activateAccountTemplate);
+  } catch (error) {
+    res.status(401).json({
+      errorMessage: errorParser(error),
     });
   }
 });
@@ -106,17 +122,17 @@ authController.post(
         throw errors;
       }
 
-      const result = await changeUsername(
+      const token = await changeUsername(
         req.body.newUsername,
         req.body.password,
         req.user.userId,
         req.token
       );
 
-      res.status(202).send(result).end();
+      res.status(202).send(token).end();
     } catch (error) {
       res.status(401).json({
-        message: errorParser(error),
+        errorMessage: errorParser(error),
       });
     }
   }
@@ -146,10 +162,10 @@ authController.post(
         req.user.userId,
         req.token
       );
-      res.status(202).json({ message: 'Done' });
+      res.status(202).json({ message: 'PASSWORD_CHANGED' });
     } catch (error) {
       res.status(401).json({
-        message: errorParser(error),
+        errorMessage: errorParser(error),
       });
     }
   }
@@ -170,12 +186,12 @@ authController.post(
       const userIdString = userId._id.toString();
 
       await markUserForPassReset(userId);
-      await sendEmail(email, userIdString);
+      await sendEmail(email, resetPasswordTemplate(userIdString));
 
-      res.status(200).json({ success: 'EMAIL_SENT' });
+      res.status(200).json({ message: 'EMAIL_PASSWORD_RESET_SENT' });
     } catch (error) {
       res.status(400).json({
-        message: errorParser(error),
+        errorMessage: errorParser(error),
       });
     }
   }
@@ -208,10 +224,10 @@ authController.post(
         return;
       }
 
-      res.status(304).json({ message: 'TICKET_EXPIRED' });
+      res.status(304).json({ errorMessage: 'TICKET_EXPIRED' });
     } catch (error) {
       res.status(401).json({
-        message: errorParser(error),
+        errorMessage: errorParser(error),
       });
     }
   }
@@ -232,10 +248,10 @@ authController.post(
       }
 
       await deleteAccount(req.body.password, req.user.userId, req.token);
-      res.status(202).json({ message: 'Done' });
+      res.status(202).json({ message: 'ACCOUNT_DELETED_SUCCESSFULLY' });
     } catch (error) {
       res.status(401).json({
-        message: errorParser(error),
+        errorMessage: errorParser(error),
       });
     }
   }

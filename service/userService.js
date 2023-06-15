@@ -50,6 +50,10 @@ async function login(email, password) {
     throw new Error('INVALID_CREDENTIALS');
   }
 
+  if (!user?.isEmailVerified) {
+    throw new Error('ACCOUNT_NOT_VERIFIED');
+  }
+
   return createToken(user);
 }
 
@@ -58,6 +62,33 @@ async function logout(token) {
     throw new Error('TOKEN_IS_NULL');
   }
   banToken(token);
+}
+
+async function verifyEmail(email) {
+  await User.findOneAndUpdate(
+    { email },
+    {
+      isEmailVerified: true,
+    },
+    { new: true }
+  );
+}
+
+async function changeUsername(newUsername, password, userId, token) {
+  const user = await User.findById(userId);
+  await verifyUserPassword(password, userId, token);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    {
+      email: user.email,
+      username: newUsername,
+      hashedPassword: user.hashedPassword,
+    },
+    { new: true }
+  );
+
+  return createToken(updatedUser);
 }
 
 async function verifyUserPassword(password, userId, token) {
@@ -70,20 +101,6 @@ async function verifyUserPassword(password, userId, token) {
   }
 
   return match;
-}
-
-async function changeUsername(newUsername, password, userId, token) {
-  const user = await User.findById(userId);
-  await verifyUserPassword(password, userId, token);
-
-  await User.findByIdAndUpdate(userId, {
-    email: user.email,
-    username: newUsername,
-    hashedPassword: user.hashedPassword,
-  });
-
-  const updatedUser = await User.findById(userId);
-  return updatedUser;
 }
 
 async function changePassword(oldPassword, newPassword, userId, token) {
@@ -136,9 +153,13 @@ async function hasTicketExpired(userId) {
 }
 
 async function resetPassword(password, userId) {
-  const user = await User.findByIdAndUpdate(userId, {
-    hashedPassword: await bcrypt.hash(password, SALT_ROUNDS),
-  });
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      hashedPassword: await bcrypt.hash(password, SALT_ROUNDS),
+    },
+    { new: true }
+  );
 
   return createToken(user);
 }
@@ -147,6 +168,7 @@ module.exports = {
   register,
   login,
   logout,
+  verifyEmail,
   changeUsername,
   changePassword,
   verifyUserPassword,
