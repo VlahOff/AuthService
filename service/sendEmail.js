@@ -1,4 +1,3 @@
-const e = require('express');
 const nodeMailer = require('nodemailer');
 
 const HOST_USER = process.env.HOST_USER;
@@ -19,9 +18,8 @@ async function sendEmail(recipientEmail, emailTemplate) {
   });
 
   await transporter.sendMail({
-    from: 'Aniline <noreply-anilinecrypto@gmail.com>',
+    from: HOST_USER,
     to: recipientEmail,
-    subject: 'Password reset.',
     html: emailTemplate,
   });
 }
