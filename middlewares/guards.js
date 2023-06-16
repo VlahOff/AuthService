@@ -9,5 +9,5 @@ function isAuthenticated() {
 }
 
 module.exports = {
-	isAuthenticated
+	isAuthenticated,
 };

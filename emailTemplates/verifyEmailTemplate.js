@@ -1,5 +1,5 @@
-module.exports = (email) => {
-  return `
+module.exports = email => {
+	return `
   <div>
     <h2>Please verify your email address</h2>
     <p>To be able to use your account.</p>

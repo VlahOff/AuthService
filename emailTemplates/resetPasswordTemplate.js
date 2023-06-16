@@ -1,5 +1,5 @@
-module.exports = (userId) => {
-  return `
+module.exports = userId => {
+	return `
   <div>
     <h1>Aniline</h1>
     <h2>You have 10 minutes to reset your password.</h2>

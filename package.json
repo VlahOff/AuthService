@@ -20,6 +20,9 @@
     "nodemailer": "^6.9.3"
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "singleAttributePerLine": true,
+    "useTabs": true
   }
 }

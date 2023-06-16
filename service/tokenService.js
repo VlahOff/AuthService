@@ -29,7 +29,7 @@ function createToken(user) {
 		userId: user._id,
 		email: user.email,
 		username: user.username,
-		app: user.app
+		app: user.app,
 	};
 
 	return {
@@ -37,7 +37,7 @@ function createToken(user) {
 		email: user.email,
 		username: user.username,
 		accessToken: jwt.sign(data, JWT_SECRET_TOKEN),
-		expiriesIn: '28800000'
+		expiriesIn: '28800000',
 	};
 }
 
@@ -49,5 +49,5 @@ module.exports = {
 	parseToken,
 	createToken,
 	banToken,
-	verifyToken
+	verifyToken,
 };
