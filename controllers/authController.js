@@ -42,9 +42,10 @@ authController.post(
 
 			const email = req.body.email;
 
-			await register(email, req.body.username, req.body.password);
-			await sendEmail(email, verifyEmailTemplate(email));
-			res.status(201).json({ message: 'SUCCESSFULLY_REGISTERED' });
+			const token = await register(email, req.body.username, req.body.password);
+			// await sendEmail(email, verifyEmailTemplate(email));
+			// res.status(201).json({ message: 'SUCCESSFULLY_REGISTERED' });
+			res.status(201).json(token);
 		} catch (error) {
 			res.status(400).json({
 				errorMessage: errorParser(error),

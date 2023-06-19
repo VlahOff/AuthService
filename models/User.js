@@ -4,7 +4,7 @@ const userSchema = new Schema({
 	email: { type: String, required: true, unique: true },
 	username: { type: String, required: false, unique: true },
 	hashedPassword: { type: String, required: true },
-	isEmailVerified: { type: Boolean, default: false },
+	isEmailVerified: { type: Boolean, default: true },
 });
 
 userSchema.index(
