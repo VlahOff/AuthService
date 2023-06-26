@@ -11,12 +11,11 @@ const EXPRESS_PORT = process.env.EXPRESS_PORT;
 
 async function start() {
 	const app = express();
+	const connectToDB = databaseConfig();
 
 	app.use(cors());
 	app.use(express.json());
 	app.use(tokenParser());
-	const connectToDB = databaseConfig();
-
 	app.use('/auth', authController);
 
 	app.get('/', (req, res) => {
